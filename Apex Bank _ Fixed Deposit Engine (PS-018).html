@@ -1,0 +1,2517 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://127.0.0.1:5000/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Bank | Fixed Deposit Engine (PS-018)</title>
+  <link rel="stylesheet" href="./Apex Bank _ Fixed Deposit Engine (PS-018)_files/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./Apex Bank _ Fixed Deposit Engine (PS-018)_files/css2" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ======================================================================
+       Sidebar Navigation
+       ====================================================================== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="bank-logo">🏛️</div>
+      <div class="brand-info">
+        <h1>APEX TRUST BANK</h1>
+        <span>FD ENGINE PS-018 • T091</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Core Operations</div>
+      <a class="nav-item" data-view="dashboard-view">
+        <span class="icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item" data-view="customers-view">
+        <span class="icon">👥</span>
+        <span>Customers</span>
+      </a>
+      <a class="nav-item" data-view="booking-view">
+        <span class="icon">📝</span>
+        <span>Book Fixed Deposit</span>
+      </a>
+      <a class="nav-item active" data-view="deposits-view">
+        <span class="icon">📑</span>
+        <span>FD Accounts &amp; Ledger</span>
+      </a>
+
+      <div class="nav-section-title">Tools &amp; Analysis</div>
+      <a class="nav-item" data-view="calculator-view">
+        <span class="icon">🧮</span>
+        <span>Interest Calculator</span>
+      </a>
+      <a class="nav-item" data-view="simulation-view">
+        <span class="icon">⚡</span>
+        <span>Daily Jobs &amp; Time Travel</span>
+      </a>
+      <a class="nav-item" data-view="reports-view">
+        <span class="icon">📋</span>
+        <span>Evaluation Reports</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="system-status">
+        <div class="pulse-dot"></div>
+        <span>Core Banking Engine Active</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ======================================================================
+       Main Content Area
+       ====================================================================== -->
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="page-title-area">
+        <h2 id="topbar-title">Fixed Deposit Master Ledger</h2>
+        <p id="topbar-desc">Lifecycle Actions: Renewals, Premature Withdrawals &amp; Liens</p>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="date-pill">
+          <span>📅 System Sim Date:</span>
+          <strong id="current-sim-date-badge">2026-04-01</strong>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="btn-quick-advance">
+          ⏩ Advance Day
+        </button>
+      </div>
+    </header>
+
+    <main class="content-container">
+
+      <!-- ==================================================================
+           VIEW 1: Dashboard View
+           ================================================================== -->
+      <section id="dashboard-view" class="view-section">
+        <!-- KPI Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-blue">
+            <div class="kpi-header">
+              <span class="kpi-title">Active Deposits</span>
+              <div class="kpi-icon">💼</div>
+            </div>
+            <div class="kpi-value" id="kpi-active-principal">₹3,22,80,832.43</div>
+            <div class="kpi-subtext" id="kpi-active-count">23 Active Accounts</div>
+          </div>
+
+          <div class="kpi-card kpi-emerald">
+            <div class="kpi-header">
+              <span class="kpi-title">Projected Maturity</span>
+              <div class="kpi-icon">📈</div>
+            </div>
+            <div class="kpi-value" id="kpi-projected-maturity">₹3,29,34,304.28</div>
+            <div class="kpi-subtext">Cumulative maturity commitments</div>
+          </div>
+
+          <div class="kpi-card kpi-amber">
+            <div class="kpi-header">
+              <span class="kpi-title">Interest Paid / Credited</span>
+              <div class="kpi-icon">💰</div>
+            </div>
+            <div class="kpi-value" id="kpi-total-interest">₹36,65,428.42</div>
+            <div class="kpi-subtext">Across all active &amp; closed FDs</div>
+          </div>
+
+          <div class="kpi-card kpi-rose">
+            <div class="kpi-header">
+              <span class="kpi-title">TDS Deducted</span>
+              <div class="kpi-icon">🏛️</div>
+            </div>
+            <div class="kpi-value" id="kpi-total-tds">₹3,41,266.00</div>
+            <div class="kpi-subtext">Threshold ₹40k tracked per FY</div>
+          </div>
+
+          <div class="kpi-card kpi-purple">
+            <div class="kpi-header">
+              <span class="kpi-title">Customer Base</span>
+              <div class="kpi-icon">👥</div>
+            </div>
+            <div class="kpi-value" id="kpi-customers-count">11</div>
+            <div class="kpi-subtext">Managed depositors</div>
+          </div>
+        </div>
+
+        <!-- Quick Summary Cards -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+          <!-- Recent Bank Lifecycle Events -->
+          <div class="card">
+            <div class="card-header">
+              <h3><span>⚡</span> Recent Bank Event Stream</h3>
+              <button class="btn btn-secondary btn-sm" onclick="App.navigateTo('reports-view')">View Full Ledger</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="dashboard-events-table">
+                <thead>
+                  <tr>
+                    <th>FD ID</th>
+                    <th>Date</th>
+                    <th>Event</th>
+                    <th>Amount</th>
+                    <th>TDS</th>
+                    <th>Net Amount</th>
+                    <th>Principal After</th>
+                    <th>Note</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboard-events-tbody">
+          <tr>
+            <td><strong>FD-0034</strong></td>
+            <td>2026-04-01</td>
+            <td><span class="badge badge-lien">LOAN_REPAY</span></td>
+            <td>₹90,000.00</td>
+            <td>₹0.00</td>
+            <td><strong>₹90,000.00</strong></td>
+            <td>₹1,00,000.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Loan fully repaid; lien released</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0034</strong></td>
+            <td>2026-03-31</td>
+            <td><span class="badge badge-closed">BACKDATE</span></td>
+            <td>₹1,00,000.00</td>
+            <td>₹0.00</td>
+            <td><strong>₹1,00,000.00</strong></td>
+            <td>₹1,00,000.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Deposit value-dated back to 2026-03-31</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0034</strong></td>
+            <td>2026-04-01</td>
+            <td><span class="badge badge-lien">LOAN_DISBURSED</span></td>
+            <td>₹90,000.00</td>
+            <td>₹0.00</td>
+            <td><strong>₹90,000.00</strong></td>
+            <td>₹1,00,000.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Loan against FD sanctioned (Lien active). Total loan: Rs 90000.00</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0035</strong></td>
+            <td>2026-04-01</td>
+            <td><span class="badge badge-rejected">PREMATURE_WITHDRAW</span></td>
+            <td>₹1,00,000.00</td>
+            <td>₹0.00</td>
+            <td><strong>₹1,00,000.00</strong></td>
+            <td>₹0.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Premature withdrawal of Rs 100000.00</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0035</strong></td>
+            <td>2026-04-01</td>
+            <td><span class="badge badge-active">BOOKING</span></td>
+            <td>₹1,00,000.00</td>
+            <td>₹0.00</td>
+            <td><strong>₹1,00,000.00</strong></td>
+            <td>₹1,00,000.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Fixed Deposit booked via Web Portal</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0019-R1-R1-R1</strong></td>
+            <td>2026-03-31</td>
+            <td><span class="badge badge-rejected">PREMATURE_WITHDRAW</span></td>
+            <td>₹1,000.00</td>
+            <td>₹0.00</td>
+            <td><strong>₹1,001.79</strong></td>
+            <td>₹1,49,000.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Premature withdrawal of Rs 1000.00</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0034</strong></td>
+            <td>2026-03-31</td>
+            <td><span class="badge badge-active">BOOKING</span></td>
+            <td>₹1,00,000.00</td>
+            <td>₹0.00</td>
+            <td><strong>₹1,00,000.00</strong></td>
+            <td>₹1,00,000.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Fixed Deposit booked via Web Portal</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0020-R1-R1-R1</strong></td>
+            <td>2026-03-31</td>
+            <td><span class="badge badge-matured">INTEREST_CREDIT</span></td>
+            <td>₹1,390.35</td>
+            <td>₹0.00</td>
+            <td><strong>₹1,390.35</strong></td>
+            <td>₹5,51,418.30</td>
+            <td style="font-size:12px; color:var(--text-muted);">Quarter-end interest compounding</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0027-R1-R1</strong></td>
+            <td>2026-03-31</td>
+            <td><span class="badge badge-matured">INTEREST_PAYOUT</span></td>
+            <td>₹678.33</td>
+            <td><span style="color:var(--accent-rose);">₹135.00</span></td>
+            <td><strong>₹543.33</strong></td>
+            <td>₹1,85,000.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Quarterly interest payout</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0019-R1-R1-R1</strong></td>
+            <td>2026-03-31</td>
+            <td><span class="badge badge-matured">INTEREST_PAYOUT</span></td>
+            <td>₹725.00</td>
+            <td>₹0.00</td>
+            <td><strong>₹725.00</strong></td>
+            <td>₹1,50,000.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Quarterly interest payout</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0008-R1-R1</strong></td>
+            <td>2026-03-31</td>
+            <td><span class="badge badge-matured">INTEREST_PAYOUT</span></td>
+            <td>₹1,498.89</td>
+            <td>₹0.00</td>
+            <td><strong>₹1,498.89</strong></td>
+            <td>₹1,90,000.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Quarterly interest payout</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0010-R1-R1</strong></td>
+            <td>2026-03-31</td>
+            <td><span class="badge badge-matured">INTEREST_PAYOUT</span></td>
+            <td>₹413.78</td>
+            <td>₹0.00</td>
+            <td><strong>₹413.78</strong></td>
+            <td>₹40,000.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Quarterly interest payout</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0015-R1-R1-R1</strong></td>
+            <td>2026-03-31</td>
+            <td><span class="badge badge-matured">INTEREST_PAYOUT</span></td>
+            <td>₹2,850.00</td>
+            <td>₹0.00</td>
+            <td><strong>₹2,850.00</strong></td>
+            <td>₹1,90,000.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Quarterly interest payout</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0007-R1</strong></td>
+            <td>2026-03-31</td>
+            <td><span class="badge badge-matured">INTEREST_PAYOUT</span></td>
+            <td>₹2,446.88</td>
+            <td>₹0.00</td>
+            <td><strong>₹2,446.88</strong></td>
+            <td>₹1,35,000.00</td>
+            <td style="font-size:12px; color:var(--text-muted);">Quarterly interest payout</td>
+          </tr>
+        
+          <tr>
+            <td><strong>FD-0033</strong></td>
+            <td>2026-03-31</td>
+            <td><span class="badge badge-matured">INTEREST_CREDIT</span></td>
+            <td>₹1,179.65</td>
+            <td>₹0.00</td>
+            <td><strong>₹1,179.65</strong></td>
+            <td>₹63,266.66</td>
+            <td style="font-size:12px; color:var(--text-muted);">Quarter-end interest compounding</td>
+          </tr>
+        </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Quick Actions & Rate Version Reference -->
+          <div class="card">
+            <div class="card-header">
+              <h3><span>📋</span> Quick Shortcuts</h3>
+            </div>
+            <div class="card-body" style="display: flex; flex-direction: column; gap: 12px;">
+              <button class="btn btn-primary" onclick="App.navigateTo('booking-view')">
+                ➕ Book New Fixed Deposit
+              </button>
+              <button class="btn btn-secondary" onclick="App.openAddCustomerModal()">
+                👤 Register New Customer
+              </button>
+              <button class="btn btn-secondary" onclick="App.navigateTo('calculator-view')">
+                🧮 Open Interest Calculator
+              </button>
+              <button class="btn btn-secondary" onclick="App.navigateTo('simulation-view')">
+                ⏩ Advance Daily Jobs
+              </button>
+
+              <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 10px 0;">
+
+              <div style="background-color: var(--bg-subtle); padding: 14px; border-radius: var(--radius-sm);">
+                <div style="font-weight: 700; font-size: 13px; margin-bottom: 6px;">Applicable Rate Card Rules</div>
+                <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                  • <strong>RC-2023</strong>: Effective from 2023-04-01<br>
+                  • <strong>RC-2025</strong>: Effective from 2025-03-17<br>
+                  • <strong>Senior Citizen</strong> (+0.50%): Age ≥ 60 &amp; Tenure ≥ 180 days<br>
+                  • <strong>TDS Threshold</strong>: ₹40,000 gross interest per customer per FY
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 2: Customer Management View
+           ================================================================== -->
+      <section id="customers-view" class="view-section">
+        <div class="card">
+          <div class="card-header">
+            <h3><span>👥</span> Customer Accounts Directory</h3>
+            <div class="card-header-actions">
+              <button class="btn btn-primary btn-sm" onclick="App.openAddCustomerModal()">
+                ➕ Add New Customer
+              </button>
+            </div>
+          </div>
+          <div class="card-body" style="padding-bottom: 0;">
+            <input type="text" id="customer-search-input" class="form-control" placeholder="Search customer by ID, Name, or PAN..." style="max-width: 400px; margin-bottom: 16px;">
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Customer ID</th>
+                  <th>Customer Name</th>
+                  <th>Date of Birth</th>
+                  <th>Category</th>
+                  <th>PAN Status</th>
+                  <th>Form 15G/H</th>
+                  <th>TDS Rate</th>
+                  <th>Savings Account</th>
+                  <th>Active FDs</th>
+                  <th>FY Interest</th>
+                  <th>FY TDS</th>
+                </tr>
+              </thead>
+              <tbody id="customers-table-tbody">
+      <tr>
+        <td><strong>CUST-001</strong></td>
+        <td>Deepak Khan</td>
+        <td>1958-02-11</td>
+        <td>
+          <span class="badge badge-senior">
+            👴 SENIOR
+          </span>
+        </td>
+        <td>
+          <code>SWDPK4658V</code>
+        </td>
+        <td>
+          NO
+        </td>
+        <td><strong>10%</strong></td>
+        <td><code>SB2894488586</code></td>
+        <td><strong>3</strong></td>
+        <td>₹70,173.94</td>
+        <td>₹0.00</td>
+      </tr>
+    
+      <tr>
+        <td><strong>CUST-002</strong></td>
+        <td>Imran Gowda</td>
+        <td>1986-07-03</td>
+        <td>
+          <span class="badge badge-general">
+            GENERAL
+          </span>
+        </td>
+        <td>
+          <code>DKDPG8367A</code>
+        </td>
+        <td>
+          NO
+        </td>
+        <td><strong>10%</strong></td>
+        <td><code>SB8237784673</code></td>
+        <td><strong>2</strong></td>
+        <td>₹38,570.74</td>
+        <td>₹0.00</td>
+      </tr>
+    
+      <tr>
+        <td><strong>CUST-003</strong></td>
+        <td>Pooja Kulkarni</td>
+        <td>1990-12-19</td>
+        <td>
+          <span class="badge badge-general">
+            GENERAL
+          </span>
+        </td>
+        <td>
+          <code>JMMPK7166Z</code>
+        </td>
+        <td>
+          NO
+        </td>
+        <td><strong>10%</strong></td>
+        <td><code>SB9917726066</code></td>
+        <td><strong>3</strong></td>
+        <td>₹57,842.39</td>
+        <td>₹0.00</td>
+      </tr>
+    
+      <tr>
+        <td><strong>CUST-004</strong></td>
+        <td>Kavya Sheikh</td>
+        <td>1979-05-25</td>
+        <td>
+          <span class="badge badge-general">
+            GENERAL
+          </span>
+        </td>
+        <td>
+          <code>TKKPS8494E</code>
+        </td>
+        <td>
+          NO
+        </td>
+        <td><strong>10%</strong></td>
+        <td><code>SB7774981744</code></td>
+        <td><strong>4</strong></td>
+        <td>₹58,993.02</td>
+        <td>₹0.00</td>
+      </tr>
+    
+      <tr>
+        <td><strong>CUST-005</strong></td>
+        <td>Shivaraj Bhat</td>
+        <td>1972-10-30</td>
+        <td>
+          <span class="badge badge-general">
+            GENERAL
+          </span>
+        </td>
+        <td>
+          <code>MMQPB7917C</code>
+        </td>
+        <td>
+          NO
+        </td>
+        <td><strong>10%</strong></td>
+        <td><code>SB5795107404</code></td>
+        <td><strong>1</strong></td>
+        <td>₹3,73,526.21</td>
+        <td><strong style="color:var(--accent-rose);">₹34912.00</strong></td>
+      </tr>
+    
+      <tr>
+        <td><strong>CUST-006</strong></td>
+        <td>Rekha Agarwal</td>
+        <td>1983-01-14</td>
+        <td>
+          <span class="badge badge-general">
+            GENERAL
+          </span>
+        </td>
+        <td>
+          <code>SJPPA8851S</code>
+        </td>
+        <td>
+          NO
+        </td>
+        <td><strong>10%</strong></td>
+        <td><code>SB9698924284</code></td>
+        <td><strong>1</strong></td>
+        <td>₹36,570.53</td>
+        <td>₹0.00</td>
+      </tr>
+    
+      <tr>
+        <td><strong>CUST-007</strong></td>
+        <td>Karthik Patil</td>
+        <td>1975-09-09</td>
+        <td>
+          <span class="badge badge-general">
+            GENERAL
+          </span>
+        </td>
+        <td>
+          <code>BYSPP2680Y</code>
+        </td>
+        <td>
+          NO
+        </td>
+        <td><strong>10%</strong></td>
+        <td><code>SB7967767083</code></td>
+        <td><strong>0</strong></td>
+        <td>₹27,246.31</td>
+        <td>₹0.00</td>
+      </tr>
+    
+      <tr>
+        <td><strong>CUST-008</strong></td>
+        <td>Lakshmi Pillai</td>
+        <td>1955-06-21</td>
+        <td>
+          <span class="badge badge-senior">
+            👴 SENIOR
+          </span>
+        </td>
+        <td>
+          <code>HDWPP8484X</code>
+        </td>
+        <td>
+          <span class="badge badge-active">SUBMITTED (0% TDS)</span>
+        </td>
+        <td><strong>0%</strong></td>
+        <td><code>SB7638440038</code></td>
+        <td><strong>3</strong></td>
+        <td>₹66,654.48</td>
+        <td>₹0.00</td>
+      </tr>
+    
+      <tr>
+        <td><strong>CUST-009</strong></td>
+        <td>Chaitra Hegde</td>
+        <td>1981-03-03</td>
+        <td>
+          <span class="badge badge-general">
+            GENERAL
+          </span>
+        </td>
+        <td>
+          <span class="badge badge-rejected">MISSING (20% TDS)</span>
+        </td>
+        <td>
+          NO
+        </td>
+        <td><strong>20%</strong></td>
+        <td><code>SB8294244131</code></td>
+        <td><strong>3</strong></td>
+        <td>₹1,49,821.28</td>
+        <td><strong style="color:var(--accent-rose);">₹27751.00</strong></td>
+      </tr>
+    
+      <tr>
+        <td><strong>CUST-010</strong></td>
+        <td>Swathi Rao</td>
+        <td>1969-11-11</td>
+        <td>
+          <span class="badge badge-general">
+            GENERAL
+          </span>
+        </td>
+        <td>
+          <code>KJAPR1542E</code>
+        </td>
+        <td>
+          NO
+        </td>
+        <td><strong>10%</strong></td>
+        <td><code>SB7397429079</code></td>
+        <td><strong>3</strong></td>
+        <td>₹27,86,029.52</td>
+        <td><strong style="color:var(--accent-rose);">₹278603.00</strong></td>
+      </tr>
+    
+      <tr>
+        <td><strong>SPOO 897</strong></td>
+        <td>spoorthi</td>
+        <td>2006-07-15</td>
+        <td>
+          <span class="badge badge-general">
+            GENERAL
+          </span>
+        </td>
+        <td>
+          <code>ABCD123</code>
+        </td>
+        <td>
+          <span class="badge badge-active">SUBMITTED (0% TDS)</span>
+        </td>
+        <td><strong>0%</strong></td>
+        <td><code>sb123456789</code></td>
+        <td><strong>0</strong></td>
+        <td>₹0.00</td>
+        <td>₹0.00</td>
+      </tr>
+    </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 3: Fixed Deposit Booking View
+           ================================================================== -->
+      <section id="booking-view" class="view-section">
+        <div class="card" style="max-width: 900px; margin: 0 auto;">
+          <div class="card-header">
+            <h3><span>📝</span> Fixed Deposit Booking Portal</h3>
+            <span class="badge badge-active">Live Rate Card Engine</span>
+          </div>
+          <div class="card-body">
+            <form id="booking-form">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="book-customer-select">Select Customer *</label>
+                  <select id="book-customer-select" class="form-control" required=""><option value="">-- Choose Depositor --</option>
+        <option value="CUST-001" data-senior="true">
+          CUST-001 - Deepak Khan (SENIOR)
+        </option>
+      
+        <option value="CUST-002" data-senior="false">
+          CUST-002 - Imran Gowda (GENERAL)
+        </option>
+      
+        <option value="CUST-003" data-senior="false">
+          CUST-003 - Pooja Kulkarni (GENERAL)
+        </option>
+      
+        <option value="CUST-004" data-senior="false">
+          CUST-004 - Kavya Sheikh (GENERAL)
+        </option>
+      
+        <option value="CUST-005" data-senior="false">
+          CUST-005 - Shivaraj Bhat (GENERAL)
+        </option>
+      
+        <option value="CUST-006" data-senior="false">
+          CUST-006 - Rekha Agarwal (GENERAL)
+        </option>
+      
+        <option value="CUST-007" data-senior="false">
+          CUST-007 - Karthik Patil (GENERAL)
+        </option>
+      
+        <option value="CUST-008" data-senior="true">
+          CUST-008 - Lakshmi Pillai (SENIOR)
+        </option>
+      
+        <option value="CUST-009" data-senior="false">
+          CUST-009 - Chaitra Hegde (GENERAL)
+        </option>
+      
+        <option value="CUST-010" data-senior="false">
+          CUST-010 - Swathi Rao (GENERAL)
+        </option>
+      
+        <option value="SPOO 897" data-senior="false">
+          SPOO 897 - spoorthi (GENERAL)
+        </option>
+      </select>
+                  <span class="input-hint" id="book-customer-hint">Select a customer to verify senior citizen eligibility</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="book-fd-id">FD Reference ID (Optional)</label>
+                  <input type="text" id="book-fd-id" class="form-control" placeholder="Leave empty for auto-generated (e.g. FD-0033)">
+                </div>
+
+                <div class="form-group">
+                  <label for="book-amount">Principal Amount (₹) *</label>
+                  <input type="number" id="book-amount" class="form-control" min="5000" step="1000" value="100000" required="">
+                  <span class="input-hint">Minimum ₹5,000. ≥ ₹2,00,00,000 qualifies for GE_2CR band</span>
+                </div>
+
+                <div class="form-group">
+                  <label>Tenure Duration *</label>
+                  <div style="display: flex; gap: 10px;">
+                    <input type="number" id="book-tenure-value" class="form-control" min="1" value="12" style="flex: 2;" required="">
+                    <select id="book-tenure-unit" class="form-control" style="flex: 1;">
+                      <option value="M" selected="">Months</option>
+                      <option value="D">Days</option>
+                    </select>
+                  </div>
+                  <span class="input-hint">Valid range: 7 days to 3,650 days (10 years)</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="book-type">Deposit Interest Type *</label>
+                  <select id="book-type" class="form-control" required="">
+                    <option value="CUMULATIVE" selected="">CUMULATIVE (Quarterly Compounding)</option>
+                    <option value="MONTHLY_PAYOUT">MONTHLY_PAYOUT (Discounted 0.9975/12)</option>
+                    <option value="QUARTERLY_PAYOUT">QUARTERLY_PAYOUT (Simple Quarterly)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="book-instruction">Maturity Instruction *</label>
+                  <select id="book-instruction" class="form-control" required="">
+                    <option value="RENEW_PRINCIPAL">RENEW_PRINCIPAL (Interest paid, principal renewed)</option>
+                    <option value="RENEW_ALL">RENEW_ALL (Full maturity proceeds renewed)</option>
+                    <option value="PAYOUT" selected="">PAYOUT (Credit proceeds to savings account)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="book-date">Booking Date *</label>
+                  <input type="date" id="book-date" class="form-control" required="">
+                </div>
+              </div>
+
+              <!-- Live Engine Dynamic Preview -->
+              <div class="preview-box">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+                    ⚡ Live Rate Card Match &amp; Maturity Projection
+                  </span>
+                  <span id="preview-card-id" class="badge badge-renewed">RC-2025 (LT_2CR)</span>
+                </div>
+
+                <div class="preview-grid">
+                  <div class="preview-metric">
+                    <h4>Tenure In Days</h4>
+                    <p id="preview-tenure-days">12 Days</p>
+                  </div>
+                  <div class="preview-metric">
+                    <h4>Applicable Rate</h4>
+                    <p id="preview-rate">3.25% p.a.</p>
+                  </div>
+                  <div class="preview-metric">
+                    <h4>Senior Add-On</h4>
+                    <p id="preview-senior-addon">+0.00%</p>
+                  </div>
+                  <div class="preview-metric">
+                    <h4>Scheduled Maturity</h4>
+                    <p id="preview-maturity-date">2026-04-13</p>
+                  </div>
+                  <div class="preview-metric">
+                    <h4>Maturity Value</h4>
+                    <p id="preview-maturity-value" style="color: #4ade80;">₹1,00,000.00</p>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px;">
+                <button type="reset" class="btn btn-secondary">Reset</button>
+                <button type="submit" class="btn btn-primary" id="btn-submit-booking">Confirm &amp; Book Fixed Deposit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 4: FD Accounts & Lifecycle Management View
+           ================================================================== -->
+      <section id="deposits-view" class="view-section active">
+        <div class="card">
+          <div class="card-header">
+            <h3><span>📑</span> Fixed Deposit Accounts Master Ledger</h3>
+            <div class="card-header-actions">
+              <select id="filter-fd-status" class="form-control" style="font-size: 12.5px; padding: 4px 8px;">
+                <option value="">All Statuses</option>
+                <option value="ACTIVE" selected="">ACTIVE</option>
+                <option value="MATURED">MATURED</option>
+                <option value="RENEWED">RENEWED</option>
+                <option value="CLOSED">CLOSED</option>
+                <option value="REJECTED">REJECTED</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>FD ID</th>
+                  <th>Customer</th>
+                  <th>Principal</th>
+                  <th>Rate</th>
+                  <th>Tenure</th>
+                  <th>Type</th>
+                  <th>Maturity Date</th>
+                  <th>Maturity Value</th>
+                  <th>Status</th>
+                  <th>Lien / Loan</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="deposits-table-tbody">
+        <tr>
+          <td><strong>FD-0034</strong></td>
+          <td>
+            <div>Pooja Kulkarni</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-003</span>
+          </td>
+          <td><strong>₹1,00,000.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.10%</span></td>
+          <td>365 Days</td>
+          <td><span style="font-size:12px;">CUMULATIVE</span></td>
+          <td>2027-03-31</td>
+          <td>₹1,07,291.29</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0034')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0034', 100000, '2026-03-31')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0034', 100000)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0034', '2026-03-31', '2026-03-31')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0020-R1-R1-R1</strong></td>
+          <td>
+            <div>Lakshmi Pillai</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-008</span>
+          </td>
+          <td><strong>₹5,51,418.30</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">6.50%</span></td>
+          <td>184 Days</td>
+          <td><span style="font-size:12px;">CUMULATIVE</span></td>
+          <td>2026-09-17</td>
+          <td>₹5,68,198.27</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0020-R1-R1-R1')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0020-R1-R1-R1', 551418.3, '2026-03-17')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0020-R1-R1-R1', 551418.3)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0020-R1-R1-R1', '2026-03-17', '2026-03-17')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0027-R1-R1</strong></td>
+          <td>
+            <div>Chaitra Hegde</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-009</span>
+          </td>
+          <td><strong>₹1,85,000.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">6.00%</span></td>
+          <td>184 Days</td>
+          <td><span style="font-size:12px;">QUARTERLY_PAYOUT</span></td>
+          <td>2026-09-09</td>
+          <td>₹1,85,000.00</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0027-R1-R1')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0027-R1-R1', 185000, '2026-03-09')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0027-R1-R1', 185000)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0027-R1-R1', '2026-03-09', '2026-03-09')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0019-R1-R1-R1</strong></td>
+          <td>
+            <div>Imran Gowda</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-002</span>
+          </td>
+          <td><strong>₹1,49,000.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">6.00%</span></td>
+          <td>184 Days</td>
+          <td><span style="font-size:12px;">QUARTERLY_PAYOUT</span></td>
+          <td>2026-09-02</td>
+          <td>₹1,50,000.00</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0019-R1-R1-R1')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0019-R1-R1-R1', 149000, '2026-03-02')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0019-R1-R1-R1', 149000)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0019-R1-R1-R1', '2026-03-02', '2026-03-02')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0008-R1-R1</strong></td>
+          <td>
+            <div>Pooja Kulkarni</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-003</span>
+          </td>
+          <td><strong>₹1,90,000.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.10%</span></td>
+          <td>444 Days</td>
+          <td><span style="font-size:12px;">QUARTERLY_PAYOUT</span></td>
+          <td>2027-05-09</td>
+          <td>₹1,90,000.00</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0008-R1-R1')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0008-R1-R1', 190000, '2026-02-19')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0008-R1-R1', 190000)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0008-R1-R1', '2026-02-19', '2026-02-19')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0010-R1-R1</strong></td>
+          <td>
+            <div>Lakshmi Pillai</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-008</span>
+          </td>
+          <td><strong>₹40,000.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.60%</span></td>
+          <td>365 Days</td>
+          <td><span style="font-size:12px;">QUARTERLY_PAYOUT</span></td>
+          <td>2027-02-10</td>
+          <td>₹40,000.00</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0010-R1-R1')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0010-R1-R1', 40000, '2026-02-10')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0010-R1-R1', 40000)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0010-R1-R1', '2026-02-10', '2026-02-10')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0015-R1-R1-R1</strong></td>
+          <td>
+            <div>Imran Gowda</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-002</span>
+          </td>
+          <td><strong>₹1,90,000.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">6.00%</span></td>
+          <td>182 Days</td>
+          <td><span style="font-size:12px;">QUARTERLY_PAYOUT</span></td>
+          <td>2026-06-03</td>
+          <td>₹1,90,000.00</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0015-R1-R1-R1')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0015-R1-R1-R1', 190000, '2025-12-03')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0015-R1-R1-R1', 190000)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0015-R1-R1-R1', '2025-12-03', '2025-12-03')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0007-R1</strong></td>
+          <td>
+            <div>Pooja Kulkarni</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-003</span>
+          </td>
+          <td><strong>₹1,35,000.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.25%</span></td>
+          <td>730 Days</td>
+          <td><span style="font-size:12px;">QUARTERLY_PAYOUT</span></td>
+          <td>2027-09-08</td>
+          <td>₹1,35,000.00</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0007-R1')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0007-R1', 135000, '2025-09-08')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0007-R1', 135000)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0007-R1', '2025-09-08', '2025-09-08')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0033</strong></td>
+          <td>
+            <div>Deepak Khan</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-001</span>
+          </td>
+          <td><strong>₹63,266.66</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.60%</span></td>
+          <td>365 Days</td>
+          <td><span style="font-size:12px;">CUMULATIVE</span></td>
+          <td>2026-08-01</td>
+          <td>₹80,871.02</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0033')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0033', 63266.66, '2025-08-01')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0033', 63266.66)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0033', '2025-08-01', '2025-08-01')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0009-R1</strong></td>
+          <td>
+            <div>Kavya Sheikh</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-004</span>
+          </td>
+          <td><strong>₹2,22,082.82</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.10%</span></td>
+          <td>548 Days</td>
+          <td><span style="font-size:12px;">CUMULATIVE</span></td>
+          <td>2026-12-25</td>
+          <td>₹2,33,853.59</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0009-R1')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0009-R1', 222082.82, '2025-06-25')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0009-R1', 222082.82)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0009-R1', '2025-06-25', '2025-06-25')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0014-R1</strong></td>
+          <td>
+            <div>Swathi Rao</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-010</span>
+          </td>
+          <td><strong>₹2,24,27,825.62</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.35%</span></td>
+          <td>365 Days</td>
+          <td><span style="font-size:12px;">CUMULATIVE</span></td>
+          <td>2026-06-17</td>
+          <td>₹2,29,10,823.67</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0014-R1')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0014-R1', 22427825.62, '2025-06-17')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0014-R1', 22427825.62)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0014-R1', '2025-06-17', '2025-06-17')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0003-R1-R1</strong></td>
+          <td>
+            <div>Chaitra Hegde</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-009</span>
+          </td>
+          <td><strong>₹2,21,633.70</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.10%</span></td>
+          <td>365 Days</td>
+          <td><span style="font-size:12px;">CUMULATIVE</span></td>
+          <td>2026-06-09</td>
+          <td>₹2,26,235.66</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0003-R1-R1')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0003-R1-R1', 221633.7, '2025-06-09')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0003-R1-R1', 221633.7)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0003-R1-R1', '2025-06-09', '2025-06-09')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0029</strong></td>
+          <td>
+            <div>Swathi Rao</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-010</span>
+          </td>
+          <td><strong>₹6,40,403.51</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.10%</span></td>
+          <td>400 Days</td>
+          <td><span style="font-size:12px;">CUMULATIVE</span></td>
+          <td>2026-04-25</td>
+          <td>₹6,48,162.66</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0029')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0029', 640403.51, '2025-03-21')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0029', 640403.51)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0029', '2025-03-21', '2025-03-21')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0028</strong></td>
+          <td>
+            <div>Swathi Rao</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-010</span>
+          </td>
+          <td><strong>₹6,39,197.39</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">6.80%</span></td>
+          <td>400 Days</td>
+          <td><span style="font-size:12px;">CUMULATIVE</span></td>
+          <td>2026-04-20</td>
+          <td>₹6,46,075.74</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0028')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0028', 639197.39, '2025-03-16')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0028', 639197.39)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0028', '2025-03-19', '2025-03-16')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0026</strong></td>
+          <td>
+            <div>Shivaraj Bhat</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-005</span>
+          </td>
+          <td><strong>₹50,00,000.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.00%</span></td>
+          <td>730 Days</td>
+          <td><span style="font-size:12px;">MONTHLY_PAYOUT</span></td>
+          <td>2027-03-05</td>
+          <td>₹50,00,000.00</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0026')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0026', 5000000, '2025-03-05')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0026', 5000000)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0026', '2025-03-05', '2025-03-05')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0025</strong></td>
+          <td>
+            <div>Rekha Agarwal</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-006</span>
+          </td>
+          <td><strong>₹2,35,000.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.00%</span></td>
+          <td>1095 Days</td>
+          <td><span style="font-size:12px;">MONTHLY_PAYOUT</span></td>
+          <td>2028-02-15</td>
+          <td>₹2,50,000.00</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0025')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0025', 235000, '2025-02-15')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0025', 235000)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0025', '2025-02-15', '2025-02-15')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0022</strong></td>
+          <td>
+            <div>Kavya Sheikh</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-004</span>
+          </td>
+          <td><strong>₹27,561.03</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.00%</span></td>
+          <td>730 Days</td>
+          <td><span style="font-size:12px;">CUMULATIVE</span></td>
+          <td>2026-11-04</td>
+          <td>₹28,724.08</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0022')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0022', 27561.03, '2024-11-04')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0022', 27561.03)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0022', '2024-11-04', '2024-11-04')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0021</strong></td>
+          <td>
+            <div>Kavya Sheikh</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-004</span>
+          </td>
+          <td><strong>₹6,123.84</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.00%</span></td>
+          <td>730 Days</td>
+          <td><span style="font-size:12px;">CUMULATIVE</span></td>
+          <td>2026-11-04</td>
+          <td>₹28,724.08</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0021')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0021', 6123.84, '2024-11-04')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0021', 6123.84)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0021', '2024-11-04', '2024-11-04')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0001-R1</strong></td>
+          <td>
+            <div>Deepak Khan</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-001</span>
+          </td>
+          <td><strong>₹1,45,000.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.30%</span></td>
+          <td>547 Days</td>
+          <td><span style="font-size:12px;">MONTHLY_PAYOUT</span></td>
+          <td>2026-04-29</td>
+          <td>₹1,45,000.00</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0001-R1')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0001-R1', 145000, '2024-10-29')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0001-R1', 145000)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0001-R1', '2024-10-29', '2024-10-29')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0018</strong></td>
+          <td>
+            <div>Kavya Sheikh</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-004</span>
+          </td>
+          <td><strong>₹2,07,448.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.00%</span></td>
+          <td>1095 Days</td>
+          <td><span style="font-size:12px;">CUMULATIVE</span></td>
+          <td>2027-08-10</td>
+          <td>₹2,46,306.19</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0018')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0018', 207448, '2024-08-10')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0018', 207448)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0018', '2024-08-10', '2024-08-10')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0017</strong></td>
+          <td>
+            <div>Deepak Khan</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-001</span>
+          </td>
+          <td><strong>₹1,64,871.56</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.50%</span></td>
+          <td>730 Days</td>
+          <td><span style="font-size:12px;">CUMULATIVE</span></td>
+          <td>2026-07-08</td>
+          <td>₹1,74,038.03</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0017')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0017', 164871.56, '2024-07-08')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0017', 164871.56)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0017', '2024-07-08', '2024-07-08')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0011</strong></td>
+          <td>
+            <div>Chaitra Hegde</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-009</span>
+          </td>
+          <td><strong>₹7,00,000.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.00%</span></td>
+          <td>1095 Days</td>
+          <td><span style="font-size:12px;">QUARTERLY_PAYOUT</span></td>
+          <td>2027-04-01</td>
+          <td>₹7,00,000.00</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0011')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0011', 700000, '2024-04-01')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0011', 700000)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0011', '2024-04-01', '2024-04-01')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>FD-0002</strong></td>
+          <td>
+            <div>Lakshmi Pillai</div>
+            <span style="font-size:11.5px; color:var(--text-muted);">CUST-008</span>
+          </td>
+          <td><strong>₹40,000.00</strong></td>
+          <td><span style="color:var(--accent-blue); font-weight:700;">7.50%</span></td>
+          <td>1096 Days</td>
+          <td><span style="font-size:12px;">QUARTERLY_PAYOUT</span></td>
+          <td>2026-05-07</td>
+          <td>₹50,000.00</td>
+          <td>
+            <span class="badge badge-active">ACTIVE</span>
+            
+          </td>
+          <td>
+            <span style="color:#94a3b8; font-size:12px;">None</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="App.openAdviceModal('FD-0002')" title="View Advice">
+                📄 Advice
+              </button>
+              
+                <button class="btn btn-danger btn-sm" onclick="App.openWithdrawalModal('FD-0002', 40000, '2023-05-07')" title="Premature Withdrawal">
+                  Withdraw
+                </button>
+                
+                  <button class="btn btn-primary btn-sm" onclick="App.openLoanModal('FD-0002', 40000)" title="Loan Against FD">
+                    Loan
+                  </button>
+                
+                <button class="btn btn-secondary btn-sm" onclick="App.openBackdateModal('FD-0002', '2023-05-07', '2023-05-07')" title="Backdate">
+                  Backdate
+                </button>
+              
+              
+            </div>
+          </td>
+        </tr>
+      </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 5: Interest & Maturity Calculator View
+           ================================================================== -->
+      <section id="calculator-view" class="view-section">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <!-- Calculator Inputs -->
+          <div class="card">
+            <div class="card-header">
+              <h3><span>🧮</span> Interest &amp; Maturity Simulator</h3>
+            </div>
+            <div class="card-body">
+              <form id="calc-form">
+                <div class="form-group">
+                  <label for="calc-principal">Principal Deposit (₹) *</label>
+                  <input type="number" id="calc-principal" class="form-control" value="200000" min="1000" step="1000" required="">
+                </div>
+
+                <div class="form-group">
+                  <label for="calc-rate">Interest Rate (% p.a.) *</label>
+                  <input type="number" id="calc-rate" class="form-control" value="7.00" step="0.05" min="0" required="">
+                </div>
+
+                <div class="form-group">
+                  <label>Tenure *</label>
+                  <div style="display: flex; gap: 10px;">
+                    <input type="number" id="calc-tenure-val" class="form-control" value="15" min="1" style="flex: 2;" required="">
+                    <select id="calc-tenure-unit" class="form-control" style="flex: 1;">
+                      <option value="M" selected="">Months</option>
+                      <option value="D">Days</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="calc-start-date">Deposit Value Date *</label>
+                  <input type="date" id="calc-start-date" class="form-control" required="">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                  Calculate Schedule &amp; Payouts
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Calculation Results Breakdown -->
+          <div class="card">
+            <div class="card-header">
+              <h3><span>📊</span> Calculation Breakdown</h3>
+            </div>
+            <div class="card-body">
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="cert-row">
+                  <span class="cert-label">Tenure Days:</span>
+                  <span class="cert-value" id="calc-res-days">15 Days</span>
+                </div>
+                <div class="cert-row">
+                  <span class="cert-label">Maturity Date:</span>
+                  <span class="cert-value" id="calc-res-maturity-date">2026-04-16</span>
+                </div>
+                <div class="cert-row">
+                  <span class="cert-label">Cumulative Maturity Value:</span>
+                  <strong style="color: var(--accent-emerald); font-size: 18px;" id="calc-res-cumulative">₹2,00,576.92</strong>
+                </div>
+                <div class="cert-row">
+                  <span class="cert-label">Cumulative Interest Earned:</span>
+                  <span class="cert-value" id="calc-res-interest">₹576.92</span>
+                </div>
+                <div class="cert-row">
+                  <span class="cert-label">Monthly Payout (Discounted factor 0.9975/12):</span>
+                  <span class="cert-value" id="calc-res-monthly">₹1,163.75 / month</span>
+                </div>
+                <div class="cert-row">
+                  <span class="cert-label">Quarterly Payout (rate/4):</span>
+                  <span class="cert-value" id="calc-res-quarterly">₹3,500.00 / quarter</span>
+                </div>
+              </div>
+
+              <div style="margin-top: 24px; padding: 14px; background-color: var(--bg-subtle); border-radius: var(--radius-sm); font-size: 12px; color: var(--text-muted);">
+                <strong>Formulas Implemented:</strong><br>
+                • Monthly: <code>principal × (rate/100) × 0.9975 / 12</code><br>
+                • Quarterly: <code>principal × (rate/100) / 4</code><br>
+                • Compounding: Compounded every calendar quarter-end (Mar 31, Jun 30, Sep 30, Dec 31) with broken stub proration.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 6: Simulation & Daily Jobs View
+           ================================================================== -->
+      <section id="simulation-view" class="view-section">
+        <div class="card" style="max-width: 800px; margin: 0 auto;">
+          <div class="card-header">
+            <h3><span>⚡</span> Daily Scheduled Jobs &amp; Time Travel</h3>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 20px;">
+              Advance the simulation date to trigger daily banking operations:
+              <br>1. <strong>Start of day</strong>: Process maturing deposits, weekend/holiday roll-overs (+3% savings interest), and 14-day auto-renewals for unclaimed payouts.
+              <br>2. <strong>End of day</strong>: Month-end and quarter-end interest payouts, TDS deduction, and compounding credits.
+            </p>
+
+            <form id="advance-date-form" style="display: flex; gap: 12px; align-items: flex-end; margin-bottom: 28px;">
+              <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                <label for="sim-target-date">Target Simulation Date *</label>
+                <input type="date" id="sim-target-date" class="form-control" required="">
+              </div>
+              <button type="submit" class="btn btn-primary" id="btn-advance-sim">
+                Advance Date &amp; Run Daily Jobs
+              </button>
+            </form>
+
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 24px 0;">
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h4 style="font-size: 14px; font-weight: 700;">Reinitialize Engine State</h4>
+                <p style="font-size: 12px; color: var(--text-muted);">Reloads rate cards, holidays, customers, and runs original commands.txt test pack</p>
+              </div>
+              <button class="btn btn-danger btn-sm" id="btn-reset-sim">
+                Reset to Original State
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 7: Evaluation Reports & Audit View
+           ================================================================== -->
+      <section id="reports-view" class="view-section">
+        <div class="card">
+          <div class="card-header">
+            <h3><span>📋</span> Official Evaluation Reports</h3>
+            <div class="card-header-actions">
+              <a href="http://127.0.0.1:5000/api/reports/download/fd_advices.csv" class="btn btn-secondary btn-sm">Download fd_advices.csv</a>
+              <a href="http://127.0.0.1:5000/api/reports/download/fd_events.csv" class="btn btn-secondary btn-sm">Download fd_events.csv</a>
+              <a href="http://127.0.0.1:5000/api/reports/download/interest_certificates.csv" class="btn btn-secondary btn-sm">Download interest_certificates.csv</a>
+              <a href="http://127.0.0.1:5000/api/reports/download/tds_statement.csv" class="btn btn-secondary btn-sm">Download tds_statement.csv</a>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Tabs for Report Tables -->
+            <div style="display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+              <button class="btn btn-sm report-tab-btn btn-secondary" data-report="advices">FD Advices</button>
+              <button class="btn btn-sm report-tab-btn btn-secondary" data-report="events">Event Ledger (fd_events)</button>
+              <button class="btn btn-sm report-tab-btn btn-secondary" data-report="certs">Interest Certificates</button>
+              <button class="btn btn-sm report-tab-btn btn-primary" data-report="tds">TDS Statements</button>
+            </div>
+
+            <!-- Report Table Container -->
+            <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+              <table class="data-table" id="report-active-table">
+                <thead id="report-table-thead">
+          <tr>
+            <th>Customer ID</th><th>FY</th><th>FD ID</th><th>Date</th>
+            <th>Interest Amount</th><th>TDS Rate</th><th>TDS Deducted</th>
+          </tr>
+        </thead>
+                <tbody id="report-table-tbody">
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2024-25</td><td><strong>FD-0014</strong></td>
+            <td>2024-06-30</td><td>₹104587.91</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹10459.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2024-25</td><td><strong>FD-0014</strong></td>
+            <td>2024-09-30</td><td>₹354159.02</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹35416.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-009</strong></td><td>2024-25</td><td><strong>FD-0011</strong></td>
+            <td>2024-12-31</td><td>₹12250.00</td><td>20.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹8692.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2024-25</td><td><strong>FD-0014</strong></td>
+            <td>2024-12-31</td><td>₹359776.87</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹35977.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-009</strong></td><td>2024-25</td><td><strong>FD-0003-R1</strong></td>
+            <td>2024-12-31</td><td>₹3488.90</td><td>20.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹698.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-009</strong></td><td>2024-25</td><td><strong>FD-0011</strong></td>
+            <td>2025-03-31</td><td>₹12250.00</td><td>20.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹2450.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2024-25</td><td><strong>FD-0014</strong></td>
+            <td>2025-03-31</td><td>₹365483.84</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹36549.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-009</strong></td><td>2024-25</td><td><strong>FD-0003-R1</strong></td>
+            <td>2025-03-31</td><td>₹3536.34</td><td>20.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹707.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-009</strong></td><td>2024-25</td><td><strong>FD-0027</strong></td>
+            <td>2025-03-31</td><td>₹702.78</td><td>20.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹141.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2024-25</td><td><strong>FD-0028</strong></td>
+            <td>2025-03-31</td><td>₹1700.00</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹170.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2024-25</td><td><strong>FD-0029</strong></td>
+            <td>2025-03-31</td><td>₹1183.33</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹118.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-005</strong></td><td>2025-26</td><td><strong>FD-0026</strong></td>
+            <td>2025-05-31</td><td>₹29093.75</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹5819.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0014</strong></td>
+            <td>2025-06-03</td><td>₹261120.93</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹26112.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-005</strong></td><td>2025-26</td><td><strong>FD-0026</strong></td>
+            <td>2025-06-30</td><td>₹29093.75</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹2909.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0028</strong></td>
+            <td>2025-06-30</td><td>₹10226.01</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹1023.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0029</strong></td>
+            <td>2025-06-30</td><td>₹10668.91</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹1067.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0014-R1</strong></td>
+            <td>2025-06-30</td><td>₹55914.12</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹5591.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-005</strong></td><td>2025-26</td><td><strong>FD-0026</strong></td>
+            <td>2025-07-31</td><td>₹29093.75</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹2910.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-005</strong></td><td>2025-26</td><td><strong>FD-0026</strong></td>
+            <td>2025-08-31</td><td>₹29093.75</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹2909.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-005</strong></td><td>2025-26</td><td><strong>FD-0026</strong></td>
+            <td>2025-09-30</td><td>₹29093.75</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹2909.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0028</strong></td>
+            <td>2025-09-30</td><td>₹10382.46</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹1038.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0029</strong></td>
+            <td>2025-09-30</td><td>₹10839.34</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹1084.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0014-R1</strong></td>
+            <td>2025-09-30</td><td>₹392323.50</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹39233.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-005</strong></td><td>2025-26</td><td><strong>FD-0026</strong></td>
+            <td>2025-10-31</td><td>₹29093.75</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹2910.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-005</strong></td><td>2025-26</td><td><strong>FD-0026</strong></td>
+            <td>2025-11-30</td><td>₹29093.75</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹2909.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-009</strong></td><td>2025-26</td><td><strong>FD-0011</strong></td>
+            <td>2025-12-31</td><td>₹12250.00</td><td>20.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹9963.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-005</strong></td><td>2025-26</td><td><strong>FD-0026</strong></td>
+            <td>2025-12-31</td><td>₹29093.75</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹2909.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0028</strong></td>
+            <td>2025-12-31</td><td>₹10541.32</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹1054.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0029</strong></td>
+            <td>2025-12-31</td><td>₹11012.50</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹1101.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-009</strong></td><td>2025-26</td><td><strong>FD-0003-R1-R1</strong></td>
+            <td>2025-12-31</td><td>₹3824.61</td><td>20.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹765.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0014-R1</strong></td>
+            <td>2025-12-31</td><td>₹398811.54</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹39881.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-009</strong></td><td>2025-26</td><td><strong>FD-0027-R1</strong></td>
+            <td>2025-12-31</td><td>₹2775.00</td><td>20.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹555.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-005</strong></td><td>2025-26</td><td><strong>FD-0026</strong></td>
+            <td>2026-01-31</td><td>₹29093.75</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹2910.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-005</strong></td><td>2025-26</td><td><strong>FD-0026</strong></td>
+            <td>2026-02-28</td><td>₹29093.75</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹2909.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-009</strong></td><td>2025-26</td><td><strong>FD-0027-R1</strong></td>
+            <td>2026-03-09</td><td>₹2096.67</td><td>20.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹419.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-009</strong></td><td>2025-26</td><td><strong>FD-0011</strong></td>
+            <td>2026-03-31</td><td>₹12250.00</td><td>20.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹2450.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-005</strong></td><td>2025-26</td><td><strong>FD-0026</strong></td>
+            <td>2026-03-31</td><td>₹29093.75</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹2909.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0028</strong></td>
+            <td>2026-03-31</td><td>₹10702.60</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹1070.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0029</strong></td>
+            <td>2026-03-31</td><td>₹11188.43</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹1119.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-009</strong></td><td>2025-26</td><td><strong>FD-0003-R1-R1</strong></td>
+            <td>2026-03-31</td><td>₹3878.92</td><td>20.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹776.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-010</strong></td><td>2025-26</td><td><strong>FD-0014-R1</strong></td>
+            <td>2026-03-31</td><td>₹405406.89</td><td>10.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹40541.00</strong></td>
+          </tr>
+        
+          <tr>
+            <td><strong>CUST-009</strong></td><td>2025-26</td><td><strong>FD-0027-R1-R1</strong></td>
+            <td>2026-03-31</td><td>₹678.33</td><td>20.00%</td>
+            <td><strong style="color:var(--accent-rose);">₹135.00</strong></td>
+          </tr>
+        </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ======================================================================
+       MODALS
+       ====================================================================== -->
+
+  <!-- Modal 1: Add Customer -->
+  <div class="modal-backdrop" id="modal-add-customer">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Register New Depositor</h3>
+        <button class="modal-close" onclick="App.closeModals()">×</button>
+      </div>
+      <form id="add-customer-form">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="cust-id">Customer ID *</label>
+            <input type="text" id="cust-id" class="form-control" placeholder="e.g. CUST-011" required="">
+          </div>
+          <div class="form-group">
+            <label for="cust-name">Full Name *</label>
+            <input type="text" id="cust-name" class="form-control" placeholder="Depositor Name" required="">
+          </div>
+          <div class="form-group">
+            <label for="cust-dob">Date of Birth *</label>
+            <input type="date" id="cust-dob" class="form-control" required="">
+            <span class="input-hint">Age ≥ 60 qualifies for Senior Citizen add-on (+0.50%)</span>
+          </div>
+          <div class="form-group">
+            <label for="cust-pan">PAN Number</label>
+            <input type="text" id="cust-pan" class="form-control" placeholder="e.g. ABCDE1234F (Empty = TDS 20%)">
+          </div>
+          <div class="form-group">
+            <label for="cust-sb">Savings Account No. *</label>
+            <input type="text" id="cust-sb" class="form-control" placeholder="e.g. SB1234567890" required="">
+          </div>
+          <div class="form-group" style="flex-direction: row; align-items: center; gap: 8px;">
+            <input type="checkbox" id="cust-15g" style="width: 16px; height: 16px;">
+            <label for="cust-15g" style="margin-bottom: 0; cursor: pointer;">Form 15G / 15H Submitted (Waives TDS to 0%)</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="App.closeModals()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Customer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Premature Withdrawal -->
+  <div class="modal-backdrop" id="modal-withdrawal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Premature Withdrawal</h3>
+        <button class="modal-close" onclick="App.closeModals()">×</button>
+      </div>
+      <form id="withdrawal-form">
+        <div class="modal-body">
+          <input type="hidden" id="withdraw-fd-id" value="FD-0035">
+          <div style="background-color: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px;">
+            <div>Target FD: <strong id="withdraw-fd-label">FD-0035</strong></div>
+            <div>Current Principal: <strong id="withdraw-fd-principal">₹1,00,000.00</strong></div>
+            <div>Value Date: <span id="withdraw-fd-valdate">2026-04-01</span></div>
+          </div>
+
+          <div class="form-group">
+            <label for="withdraw-type-select">Withdrawal Type *</label>
+            <select id="withdraw-type-select" class="form-control">
+              <option value="FULL" selected="">FULL Closure</option>
+              <option value="PARTIAL">Partial Withdrawal</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="withdraw-amount-group" style="display: none;">
+            <label for="withdraw-amount">Partial Withdrawal Amount (₹) *</label>
+            <input type="number" id="withdraw-amount" class="form-control" min="1000" step="1000">
+            <span class="input-hint">Rules: Must be multiple of ₹1,000; remaining principal must be ≥ ₹5,000</span>
+          </div>
+
+          <div class="form-group">
+            <label for="withdraw-date">Withdrawal Date *</label>
+            <input type="date" id="withdraw-date" class="form-control" required="">
+            <span class="input-hint">Day ≤ 7: 0 interest, 0 penalty. Day &gt; 7: Re-priced at tenure card rate − 1% penalty.</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="App.closeModals()">Cancel</button>
+          <button type="submit" class="btn btn-danger">Execute Premature Withdrawal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 3: Loan Against FD -->
+  <div class="modal-backdrop" id="modal-loan">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Sanction Loan Against Fixed Deposit</h3>
+        <button class="modal-close" onclick="App.closeModals()">×</button>
+      </div>
+      <form id="loan-form">
+        <div class="modal-body">
+          <input type="hidden" id="loan-fd-id" value="FD-0034">
+          <div style="background-color: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px;">
+            <div>Deposit: <strong id="loan-fd-label">FD-0034</strong></div>
+            <div>Deposit Principal: <strong id="loan-fd-principal">₹1,00,000.00</strong></div>
+            <div>Maximum Permitted (90%): <strong id="loan-fd-max" style="color: var(--accent-blue);">₹90,000.00</strong></div>
+          </div>
+
+          <div class="form-group">
+            <label for="loan-amount">Loan Amount (₹) *</label>
+            <input type="number" id="loan-amount" class="form-control" min="1000" step="500" required="">
+            <span class="input-hint">Or click button below to disburse maximum permitted loan</span>
+          </div>
+
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-loan-max" style="margin-bottom: 14px;">
+            Use Maximum (90%)
+          </button>
+
+          <div class="form-group">
+            <label for="loan-date">Sanction Date *</label>
+            <input type="date" id="loan-date" class="form-control" required="">
+            <span class="input-hint">Lien will be placed on FD, preventing premature withdrawal until repaid</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="App.closeModals()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Sanction Loan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 4: Loan Repay -->
+  <div class="modal-backdrop" id="modal-loan-repay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Repay Loan Against FD</h3>
+        <button class="modal-close" onclick="App.closeModals()">×</button>
+      </div>
+      <form id="loan-repay-form">
+        <div class="modal-body">
+          <input type="hidden" id="repay-fd-id" value="FD-0034">
+          <div style="background-color: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px;">
+            <div>Deposit: <strong id="repay-fd-label">FD-0034</strong></div>
+            <div>Outstanding Loan: <strong id="repay-fd-outstanding" style="color: var(--accent-rose);">₹90,000.00</strong></div>
+          </div>
+
+          <div class="form-group">
+            <label for="repay-amount">Repayment Amount (₹) *</label>
+            <input type="number" id="repay-amount" class="form-control" min="1" step="1" required="">
+          </div>
+
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-repay-full" style="margin-bottom: 14px;">
+            Full Repayment &amp; Release Lien
+          </button>
+
+          <div class="form-group">
+            <label for="repay-date">Repayment Date *</label>
+            <input type="date" id="repay-date" class="form-control" required="">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="App.closeModals()">Cancel</button>
+          <button type="submit" class="btn btn-success">Record Repayment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 5: Backdate FD -->
+  <div class="modal-backdrop" id="modal-backdate">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Backdate Fixed Deposit</h3>
+        <button class="modal-close" onclick="App.closeModals()">×</button>
+      </div>
+      <form id="backdate-form">
+        <div class="modal-body">
+          <input type="hidden" id="backdate-fd-id" value="FD-0034">
+          <div style="background-color: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px;">
+            <div>Deposit: <strong id="backdate-fd-label">FD-0034</strong></div>
+            <div>Booking Date: <span id="backdate-booking-date">2026-03-31</span></div>
+            <div>Current Value Date: <span id="backdate-current-valdate">2026-03-31</span></div>
+          </div>
+
+          <div class="form-group">
+            <label for="backdate-new-date">New Value Date *</label>
+            <input type="date" id="backdate-new-date" class="form-control" required="">
+            <span class="input-hint">Rule: Maximum 3 calendar days prior to booking date</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="App.closeModals()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Apply Backdating</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 6: View Official FD Advice Certificate -->
+  <div class="modal-backdrop" id="modal-advice">
+    <div class="modal" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3>Official Fixed Deposit Advice</h3>
+        <button class="modal-close" onclick="App.closeModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="advice-certificate" id="advice-certificate-content">
+          <div class="cert-header">
+            <h2>APEX TRUST BANK OF INDIA</h2>
+            <p>FIXED DEPOSIT CONFIRMATION ADVICE</p>
+          </div>
+
+          <div class="cert-grid">
+            <div class="cert-row">
+              <span class="cert-label">Deposit Reference:</span>
+              <span class="cert-value" id="cert-fd-id">-</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Customer ID:</span>
+              <span class="cert-value" id="cert-customer-id">-</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Depositor Name:</span>
+              <span class="cert-value" id="cert-customer-name">-</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Rate Card ID:</span>
+              <span class="cert-value" id="cert-card-id">-</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Booking Date:</span>
+              <span class="cert-value" id="cert-booking-date">-</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Value Date:</span>
+              <span class="cert-value" id="cert-value-date">-</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Maturity Date:</span>
+              <span class="cert-value" id="cert-maturity-date">-</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Tenure (Days):</span>
+              <span class="cert-value" id="cert-tenure-days">-</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Principal Amount:</span>
+              <span class="cert-value" id="cert-principal">₹0.00</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Interest Rate (% p.a.):</span>
+              <span class="cert-value" id="cert-rate">0.00%</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Deposit Scheme:</span>
+              <span class="cert-value" id="cert-type">-</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Maturity Instruction:</span>
+              <span class="cert-value" id="cert-instruction">-</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Projected Maturity Value:</span>
+              <span class="cert-value" id="cert-maturity-val" style="color: var(--accent-emerald);">₹0.00</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-label">Account Status:</span>
+              <span class="cert-value" id="cert-status">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="App.closeModals()">Close</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()">🖨️ Print Advice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- JavaScript -->
+  <script src="./Apex Bank _ Fixed Deposit Engine (PS-018)_files/app.js.download"></script>
+
+</body></html>
